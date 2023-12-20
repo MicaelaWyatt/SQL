@@ -1,0 +1,61 @@
+ere */
+
+CREATE TABLE famous_people (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fullname TEXT,
+            age INTEGER,
+            career_id INTEGER);
+            
+CREATE TABLE career_options (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT);
+            
+CREATE TABLE famous_couples (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            person1 INTEGER,
+            person2 INTEGER);INSERT INTO career_options (name)
+VALUES 
+("Musician"),
+("Actor"),
+("Artist"),
+("Influencer"),
+("Athlete");
+
+INSERT INTO famous_people (fullname, age, career_id)
+VALUES
+("Blake Lively", 36, 2),
+("Ryan Renolds", 47, 2),
+("Katy Perry", 39, 1),
+("Orlando Bloom", 46, 2),
+("Beyonce", 42, 1),
+("JZ", 54, 1),
+("Kim Kardashian", 43, 4),
+("Annie Leibovitz", 74,3),
+("Lionel Messi", 36, 5);
+
+INSERT INTO famous_couples (person1, person2)
+VALUES
+(1,2),
+(3,4),
+(5,6);
+
+/*Create a table showing famous peoples name, age, and career name*/
+SELECT famous_people.fullname, famous_people.age, career_options.name
+FROM famous_people
+JOIN career_options
+ON famous_people.career_id = career_options.id;
+
+/*Create a table showing famous peoples name, age and career if they are musicians or actors*/
+SELECT famous_people.fullname, famous_people.age, career_options.name
+FROM famous_people
+JOIN career_options
+ON famous_people.career_id = career_options.id
+WHERE career_options.name = "Musician"
+OR career_options.name = "Actor";
+
+/*Create a table showing famous couples with their full names*/
+SELECT a.fullname, b.fullname FROM famous_couples
+JOIN famous_people a
+ON famous_couples.person1 = a.id
+JOIN famous_people b
+ON famous_couples.person2 = b.id;
