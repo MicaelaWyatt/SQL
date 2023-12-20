@@ -49,13 +49,14 @@ VALUES
 ("J.K Rowling", 58, 8),
 ("Gigi Hadid", 28,10);
 
-
-
 INSERT INTO famous_couples (person1, person2)
 VALUES
 (1,2),
 (3,4),
 (5,6);
+
+
+#Analysis:
 
 #Create a table showing famous peoples name, age, and career name
 SELECT famous_people.fullname, famous_people.age, career_options.name
