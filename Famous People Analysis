@@ -1,4 +1,4 @@
-ere */
+#This analysis utilized the following famous people dataset:
 
 CREATE TABLE famous_people (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +19,17 @@ VALUES
 ("Actor"),
 ("Artist"),
 ("Influencer"),
-("Athlete");
+("Athlete"),
+("Comedian"),
+("Political Figure"),
+("Writer"),
+("Dancer"),
+("Model"),
+("Doctor"),
+("Youtuber"),
+("Cinematographer"),
+("Photographer"),
+("Makeup Artist");
 
 INSERT INTO famous_people (fullname, age, career_id)
 VALUES
@@ -30,8 +40,16 @@ VALUES
 ("Beyonce", 42, 1),
 ("JZ", 54, 1),
 ("Kim Kardashian", 43, 4),
-("Annie Leibovitz", 74,3),
-("Lionel Messi", 36, 5);
+("Annie Leibovitz", 74,14),
+("Lionel Messi", 36, 5),
+("Matt Rife", 28, 6),
+("Tana Mongeau", 25, 4),
+("Joe Biden", 81, 7),
+("Chris Rock", 58, 6),
+("J.K Rowling", 58, 8),
+("Gigi Hadid", 28,10);
+
+
 
 INSERT INTO famous_couples (person1, person2)
 VALUES
@@ -39,13 +57,13 @@ VALUES
 (3,4),
 (5,6);
 
-/*Create a table showing famous peoples name, age, and career name*/
+#Create a table showing famous peoples name, age, and career name
 SELECT famous_people.fullname, famous_people.age, career_options.name
 FROM famous_people
 JOIN career_options
 ON famous_people.career_id = career_options.id;
 
-/*Create a table showing famous peoples name, age and career if they are musicians or actors*/
+#Create a table showing famous peoples name, age and career if they are musicians or actors#
 SELECT famous_people.fullname, famous_people.age, career_options.name
 FROM famous_people
 JOIN career_options
@@ -53,7 +71,7 @@ ON famous_people.career_id = career_options.id
 WHERE career_options.name = "Musician"
 OR career_options.name = "Actor";
 
-/*Create a table showing famous couples with their full names*/
+#Create a table showing famous couples with their full names
 SELECT a.fullname, b.fullname FROM famous_couples
 JOIN famous_people a
 ON famous_couples.person1 = a.id
