@@ -1,0 +1,92 @@
+#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about a digital media store and includes tables for artists, albums, media tracks, invoices, and customers.
+
+
+#1.Show all tracks with their name Albumname, MediaType and Genere
+SELECT t.Name as Song_title , a.title as Album_title, m.Name as Media_type, g.Name as Genre
+FROM chinook.tracks t
+LEFT JOIN chinook.albums a
+ON a.AlbumId = t.AlbumId
+LEFT JOIN chinook.media_types m
+ON m.MediaTypeId = t.MediaTypeId
+LEFT JOIN chinook.genres g
+ON g.GenreId = t.GenreId;
+
+#2.Show all artist and albums they have released
+SELECT albums.title, artists.name
+FROM chinook.albums
+LEFT JOIN chinook.artists
+ON albums.ArtistId = artists.ArtistId;
+
+#3.Show all albums, their artist and each song in the album
+SELECT a.Title AS Album_title,artists.name AS Artist_name, t.Name AS Song_name
+FROM chinook.tracks t 
+LEFT JOIN chinook.albums a
+ON a.AlbumId = t.AlbumId
+Left JOIN chinook.artists
+ON artists.ArtistID = a.ArtistId
+ORDER BY Artist_name;
+
+#4.Show me all albums that have more than 10 songs
+SELECT a.Title, COUNT(t.AlbumId) AS SongsOnAlbum
+FROM chinook.tracks t
+LEFT JOIN chinook.albums a
+ON a.AlbumId = t.AlbumId
+WHERE t.AlbumID IN
+(Select AlbumID FROM chinook.tracks 
+ GROUP BY AlbumID HAVING COUNT (AlbumId)>10)
+ GROUP BY a.Title;
+
+#5.Show me the revenue made in 2012
+# method 1
+SELECT SUM(Total) AS RevenueFor2012 FROM chinook.invoices
+WHERE InvoiceDate like '2012%';
+# method 2
+WITH Revenue_2012 AS (
+SELECT * FROM invoices
+WHERE InvoiceDate LIKE '2012%')
+SELECT SUM(Total)
+FROM Revenue_2012;
+
+#6.How many customers did we have in 2013
+SELECT COUNT(Distinct CustomerId) AS UniqueCustomersIn2013
+FROM chinook.invoices
+WHERE InvoiceDate LIKE '2013%';
+
+#7.Show Customers (their full names, customer ID, and country) who are not in the US
+SELECT CustomerId, FirstName || ' ' || LastName AS FullName, Country
+FROM chinook.customers
+WHERE Country != 'USA';
+
+#8.Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country
+SELECT c.Firstname || ' ' || c.LastName AS FullName, i.InvoiceId, i.InvoiceDate, i.BillingCountry
+FROM chinook.invoices i
+LEFT JOIN chinook.customers c
+ON c.CustomerId = i.CustomerId
+WHERE BillingCountry = "Brazil";
+
+#9.Show the Employees who are Sales Agents.
+SELECT * 
+FROM chinook.employees
+WHERE Title = 'Sales Support Agent';
+
+#10.Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name
+SELECT i.InvoiceId, i.CustomerId, c.SupportRepID, e.FirstName || ' ' || e.LastName AS SaleAgentsFullName
+FROM chinook.invoices i 
+LEFT JOIN chinook.customers c
+ON i.CustomerId = c.CustomerId
+LEFT JOIN chinook.employees e
+ON c.SupportRepId = e.EmployeeId;
+
+#11.Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers
+SELECT i.Total AS InvoiceTotal, c.FirstName || ' ' || c.LastName AS CustomersFullName, c.Country,e.FirstName || ' ' || e.LastName AS SaleAgentsFullName
+FROM chinook.invoices i
+LEFT JOIN chinook.customers c
+ON i.CustomerId = c.CustomerId
+LEFT JOIN chinook.employees e
+ON c.SupportRepId = e.EmployeeId;
+
+#12.Write a query that includes the purchased track name with each invoice line ID
+SELECT t.Name, chinook.invoice_items.InvoiceId
+FROM chinook.invoice_items 
+LEFT JOIN chinook.tracks t
+ON t.TrackId = chinook.invoice_items.TrackId;
